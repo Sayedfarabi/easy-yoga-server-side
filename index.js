@@ -3,7 +3,7 @@ const cors = require("cors");
 const colors = require("colors");
 const app = express();
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
 // middle wares : 
@@ -32,9 +32,57 @@ dbConnection()
 const Services = client.db("easyYoga").collection("services");
 const Review = client.db("easyYoga").collection("review");
 
-// app.get("services", (req, res) => {
+app.post("/services", async (req, res) => {
+    try {
+        const data = req.body;
+        const result = await Services.insertOne(data);
+        // console.log(result)
+        if (result.acknowledged) {
+            console.log("services add to db successful")
+            res.send({
+                success: true,
+                message: "successfully created the service"
+            })
+        } else {
+            console.log("can't create the service".yellow)
+            res.send({
+                success: false,
+                message: "couldn't create the service"
+            })
 
-// })
+        }
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow)
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
+app.get("/services", async (req, res) => {
+    try {
+        const services = await Services.find({}).toArray()
+        if (!services) {
+            res.send({
+                success: false,
+                message: "Services collection does not exist"
+            })
+        } else {
+            res.send({
+                success: true,
+                message: "successfully got all data",
+                data: services
+            })
+        }
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow)
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+})
 
 
 
