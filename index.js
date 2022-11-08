@@ -3,6 +3,7 @@ const cors = require("cors");
 const colors = require("colors");
 const app = express();
 require("dotenv").config();
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
@@ -31,7 +32,7 @@ dbConnection()
 
 const Services = client.db("easyYoga").collection("services");
 const Review = client.db("easyYoga").collection("review");
-const User = client.db("easyYoga").collection("user");
+const Users = client.db("easyYoga").collection("users");
 
 // Post data for services 
 
@@ -91,12 +92,12 @@ app.post("/add-review", async (req, res) => {
     }
 })
 
-// Post api create for user collection 
+// Post api create for users collection 
 
 app.post("/register", async (req, res) => {
     try {
         const { email } = req.body;
-        const data = await User.insertOne({ email })
+        const data = await Users.insertOne({ email })
         if (data.acknowledged) {
             res.send({
                 success: true,
@@ -107,6 +108,47 @@ app.post("/register", async (req, res) => {
                 success: false,
                 message: "Couldn't added the user"
             })
+        }
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow)
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
+// Post api created for JWT token verify 
+
+app.post("/login", async (req, res) => {
+    try {
+        const { email } = req.body;
+        const newEmail = email;
+        if (!newEmail) {
+            return res.send({
+                success: false,
+                message: "Please provide email address"
+            })
+        } else {
+            const userEmail = await Users.findOne({ email: newEmail })
+            if (!userEmail) {
+                return res.send({
+                    success: false,
+                    message: "Email is doesn't exist"
+                })
+            } else {
+                const tokenObj = {
+                    email: newEmail
+                }
+
+                // console.log(tokenObj)
+                const token = jwt.sign(tokenObj, process.env.ACCESS_TOKEN_SECRET);
+                res.send({
+                    success: true,
+                    data: tokenObj,
+                    token: token
+                })
+            }
         }
     } catch (error) {
         console.log(error.name.bgRed, error.message.yellow)
