@@ -31,6 +31,7 @@ dbConnection()
 
 const Services = client.db("easyYoga").collection("services");
 const Review = client.db("easyYoga").collection("review");
+const User = client.db("easyYoga").collection("user");
 
 // Post data for services 
 
@@ -79,6 +80,32 @@ app.post("/add-review", async (req, res) => {
             res.send({
                 success: false,
                 message: "couldn't create the review"
+            })
+        }
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow)
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
+// Post api create for user collection 
+
+app.post("/register", async (req, res) => {
+    try {
+        const { email } = req.body;
+        const data = await User.insertOne({ email })
+        if (data.acknowledged) {
+            res.send({
+                success: true,
+                message: "Successfully added the user"
+            })
+        } else {
+            res.send({
+                success: false,
+                message: "Couldn't added the user"
             })
         }
     } catch (error) {
