@@ -154,6 +154,29 @@ app.get("/services/:id", async (req, res) => {
     }
 })
 
+// Get api for reviews by serviceId params 
+
+app.get("/review/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const cursor = await Review.find({ serviceId: id });
+        const reviews = await cursor.toArray();
+        console.log(reviews)
+        res.send({
+            success: true,
+            data: reviews
+        })
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow)
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
+// Get api for user reviews by pass email query 
+
 
 
 app.listen(port, () => {
