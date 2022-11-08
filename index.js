@@ -62,7 +62,7 @@ app.post("/services", async (req, res) => {
     }
 })
 
-
+// Post data for review collection 
 
 app.post("/add-review", async (req, res) => {
     try {
@@ -134,7 +134,25 @@ app.get("/services", async (req, res) => {
     }
 })
 
+// Get service by Id 
 
+app.get("/services/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const service = await Services.findOne({ _id: ObjectId(id) });
+        console.log(service)
+        res.send({
+            success: true,
+            data: service
+        })
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow);
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+})
 
 
 
