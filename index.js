@@ -202,6 +202,34 @@ app.get("/user-reviews", async (req, res) => {
     }
 })
 
+// Patch api create for user-review by review id 
+
+app.patch("/user-reviews/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await Review.updateOne({ _id: ObjectId(id) }, { $set: req.body });
+
+        if (result.matchedCount) {
+            res.send({
+                success: true,
+                message: "successfully updated"
+            })
+        } else {
+            res.send({
+                success: false,
+                message: "couldn't update the review"
+            })
+        }
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow)
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+
+})
+
 app.listen(port, () => {
     console.log(`This server running port on ${port}`);
 })
