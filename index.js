@@ -212,12 +212,12 @@ app.patch("/user-reviews/:id", async (req, res) => {
         if (result.matchedCount) {
             res.send({
                 success: true,
-                message: "successfully updated"
+                message: "Successfully updated"
             })
         } else {
             res.send({
                 success: false,
-                message: "couldn't update the review"
+                message: "Couldn't update the review"
             })
         }
     } catch (error) {
@@ -228,6 +228,33 @@ app.patch("/user-reviews/:id", async (req, res) => {
         })
     }
 
+})
+
+// Delete api create for user-review by review id 
+
+app.delete("/user-reviews/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await Review.deleteOne({ _id: ObjectId(id) })
+        console.log(result)
+        if (result.deletedCount) {
+            res.send({
+                success: true,
+                message: "Successfully deleted"
+            })
+        } else {
+            res.send({
+                success: false,
+                message: "Already deleted the review"
+            })
+        }
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow)
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
 })
 
 app.listen(port, () => {
