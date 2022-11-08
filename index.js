@@ -60,6 +60,32 @@ app.post("/services", async (req, res) => {
     }
 })
 
+app.post("/add-review", async (req, res) => {
+    try {
+        const data = req.body;
+        const result = await Review.insertOne(data)
+        if (result.acknowledged) {
+            console.log("review add to db successful")
+            res.send({
+                success: true,
+                message: "successfully created the review"
+            })
+        } else {
+            console.log("can't create the review".yellow)
+            res.send({
+                success: false,
+                message: "couldn't create the review"
+            })
+        }
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow)
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
 app.get("/services", async (req, res) => {
     try {
         const services = await Services.find({}).toArray()
@@ -83,6 +109,8 @@ app.get("/services", async (req, res) => {
         })
     }
 })
+
+
 
 
 
