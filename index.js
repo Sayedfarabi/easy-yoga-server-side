@@ -32,6 +32,8 @@ dbConnection()
 const Services = client.db("easyYoga").collection("services");
 const Review = client.db("easyYoga").collection("review");
 
+// Post data for services 
+
 app.post("/services", async (req, res) => {
     try {
         const data = req.body;
@@ -60,6 +62,8 @@ app.post("/services", async (req, res) => {
     }
 })
 
+
+
 app.post("/add-review", async (req, res) => {
     try {
         const data = req.body;
@@ -85,6 +89,26 @@ app.post("/add-review", async (req, res) => {
         })
     }
 })
+
+// Get Three data for homepage 
+
+app.get("/three-service", async (req, res) => {
+    try {
+        const query = {};
+        const cursor = Services.find(query)
+        const data = await cursor.limit(3).toArray();
+        res.send(data)
+        console.log(data)
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow)
+        res.send({
+            success: false,
+            message: "can't get limitation services"
+        })
+    }
+})
+
+// Get All data for services route 
 
 app.get("/services", async (req, res) => {
     try {
