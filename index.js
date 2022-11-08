@@ -177,7 +177,30 @@ app.get("/review/:id", async (req, res) => {
 
 // Get api for user reviews by pass email query 
 
+app.get("/user-reviews", async (req, res) => {
+    try {
+        const userEmail = req.query?.email;
+        if (userEmail) {
+            const cursor = await Review.find({ email: userEmail });
+            const reviews = await cursor.toArray();
+            console.log(reviews)
+            res.send({
+                success: true,
+                data: reviews
+            })
+        } else {
+            console.log("doesn't exist data by query params")
+            res.send("doesn't exist data by query params")
+        }
 
+    } catch (error) {
+        console.log(error.name.bgRed, error.message.yellow)
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+})
 
 app.listen(port, () => {
     console.log(`This server running port on ${port}`);
