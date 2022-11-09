@@ -34,6 +34,15 @@ const Services = client.db("easyYoga").collection("services");
 const Review = client.db("easyYoga").collection("review");
 const Users = client.db("easyYoga").collection("users");
 
+// For server Testing 
+
+app.get("/", (req, res) => {
+    res.send({
+        success: true,
+        message: "Server is connected"
+    })
+})
+
 // Post data for services 
 
 app.post("/services", async (req, res) => {
