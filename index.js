@@ -34,14 +34,14 @@ const Services = client.db("easyYoga").collection("services");
 const Review = client.db("easyYoga").collection("review");
 const Users = client.db("easyYoga").collection("users");
 
-// For server Testing 
+// // For server Testing 
 
-app.get("/", (req, res) => {
-    res.send({
-        success: true,
-        message: "Server is connected"
-    })
-})
+// app.get("/", (req, res) => {
+//     res.send({
+//         success: true,
+//         message: "Server is connected"
+//     })
+// })
 
 // Post data for services 
 
@@ -170,7 +170,7 @@ app.post("/login", async (req, res) => {
 
 // Get Three data for homepage 
 
-app.get("/three-service", async (req, res) => {
+app.get("/", async (req, res) => {
     try {
         const query = {};
         const cursor = Services.find(query)
