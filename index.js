@@ -204,7 +204,7 @@ app.get("/services", async (req, res) => {
 
 // Get service by Id 
 
-app.get("/services/:id", async (req, res) => {
+app.get("/service/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const service = await Services.findOne({ _id: ObjectId(id) });
