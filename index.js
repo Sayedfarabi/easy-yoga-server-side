@@ -4,6 +4,7 @@ const colors = require("colors");
 const app = express();
 require("dotenv").config();
 const jwt = require('jsonwebtoken');
+const auth = require("./middlewares/auth")
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
@@ -246,7 +247,7 @@ app.get("/review/:id", async (req, res) => {
 
 // Get api for user reviews by pass email query 
 
-app.get("/user-reviews", verifyJwt, async (req, res) => {
+app.get("/user-reviews", auth, async (req, res) => {
     try {
         const userEmail = req.query?.email;
         if (userEmail) {
@@ -301,7 +302,7 @@ app.patch("/user-reviews/:id", async (req, res) => {
 
 // Delete api create for user-review by review id 
 
-app.delete("/user-reviews/:id", verifyJwt, async (req, res) => {
+app.delete("/user-reviews/:id", auth, async (req, res) => {
     try {
         const { id } = req.params;
         console.log(id)
