@@ -274,7 +274,7 @@ app.get("/user-reviews", auth, async (req, res) => {
 
 // Patch api create for user-review by review id 
 
-app.patch("/user-reviews/:id", async (req, res) => {
+app.patch("/user-reviews/:id", auth, async (req, res) => {
     try {
         const { id } = req.params;
         const result = await Review.updateOne({ _id: ObjectId(id) }, { $set: req.body });
