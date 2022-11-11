@@ -68,6 +68,7 @@ app.post("/services", async (req, res) => {
 app.post("/add-review", async (req, res) => {
     try {
         const data = req.body;
+        console.log(data)
         const result = await Review.insertOne(data)
         if (result.acknowledged) {
             console.log("review add to db successful")
@@ -303,6 +304,7 @@ app.patch("/user-reviews/:id", async (req, res) => {
 app.delete("/user-reviews/:id", async (req, res) => {
     try {
         const { id } = req.params;
+        console.log(id)
         const result = await Review.deleteOne({ _id: ObjectId(id) })
         console.log(result)
         if (result.deletedCount) {
