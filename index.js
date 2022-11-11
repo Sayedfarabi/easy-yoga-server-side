@@ -246,11 +246,11 @@ app.get("/review/:id", async (req, res) => {
 
 // Get api for user reviews by pass email query 
 
-app.get("/user-reviews", async (req, res) => {
+app.get("/user-reviews", verifyJwt, async (req, res) => {
     try {
         const userEmail = req.query?.email;
         if (userEmail) {
-            const cursor = await Review.find({ email: userEmail });
+            const cursor = Review.find({ email: userEmail });
             const reviews = await cursor.toArray();
             console.log(reviews)
             res.send({
@@ -301,7 +301,7 @@ app.patch("/user-reviews/:id", async (req, res) => {
 
 // Delete api create for user-review by review id 
 
-app.delete("/user-reviews/:id", async (req, res) => {
+app.delete("/user-reviews/:id", verifyJwt, async (req, res) => {
     try {
         const { id } = req.params;
         console.log(id)
